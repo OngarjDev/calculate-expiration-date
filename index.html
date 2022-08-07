@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to OngarjDev project</title>
+    <link rel="icon" type="image/x-icon" href="image/titleborn.png" />
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-success">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">คำนวณอาหารหมดอายุ</span>
+        </div>
+    </nav>
+    <div class="container-fluid mt-2">
+        <div class="row">
+
+            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                <div class="card">
+                    <div class="card-header bg-secondary text-light">
+                        ช่องกรอกข้อมูล
+                    </div>
+                    <div class="card-body">
+                        <h4>วันที่ผลิต</h4>
+                        <input type="date" class="form-control" id="datestart" oninput="check1()">
+                        <h4>วันที่หมดอายุ</h4>
+                        <input type="date" class="form-control" id="dateend" oninput="check2()">
+                        <button class="btn btn-warning w-100 mt-3" onclick="process()">คำนวณวันหมดอายุ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                <table class="table table-bordered table-info">
+                    <tr class="text-center">
+                        <td>รายละเอียด</td>
+                        <td>การคำนวณ</td>
+                    </tr>
+                    <tr class="table table-light table-striped">
+                        <td>วันที่ผลิต</td>
+                        <td id="resultstart"></td>
+                    </tr>
+                    <tr>
+                        <td>วันที่หมดอายุ</td>
+                        <td id="resultend"></td>
+                    </tr>
+                    <tr class="table table-light table-striped">
+                        <td>วันที่ปัจจุบัน</td>
+                        <td id="resultdatenow"></td>
+                    </tr>
+                    <tr>
+                        <td>จำนวนวันหมดอายุทั้งหมด(จากผู้ผลิต)</td>
+                        <td id="sumdate"></td>
+                    </tr>
+                    <tr class="table table-light table-striped">
+                        <td>จำนวนวันหมดอายุคงเหลือขณะนี้</td>
+                        <td id="totaldate"></td>
+                    </tr>
+                </table>
+                <p class="text-center" id="result"></p>
+            </div>
+            <div class="row text-center">
+                <hr class="mt-2">
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                    <h1 class="mt-5">คู่มือการใช้งานแบบลวกน้ำจิ้ม</h1>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                    <div class="list-group">
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" id="check1" value="True" disabled>
+                            ขั้นแรก กรอกวันที่ผลิต
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" id="check2" value="" disabled>
+                            ขั้นที่สอง กรอกวันที่หมดอายุ
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" id="check3" value="" disabled>
+                            ขั้นที่สาม คลิกคำนวณวันหมดอายุ
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        function formatdate(date) {
+            ///แปลงจาก obj เป็น วันที่ 19/8/2022
+            return (date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+        }
+        function total(max, min) {
+            /// คำนวณวันที่ เดือน ปี คงเหลือปัจจุบัน
+            var time = max.getTime() - min.getTime(),
+                diffDay = time / (1000 * 3600 * 24);///แปลงเวลาให้เป็นวัน
+            return "จำนวนวันที่เหลือ" + Math.ceil(diffDay) + "วัน";
+        }
+        function process() {
+            const date1 = new Date(document.getElementById('datestart').value.match(/\d+/g));
+            const date2 = new Date(document.getElementById('dateend').value.match(/\d+/g));
+            const datetonow = new Date();
+
+            document.getElementById('resultstart').innerHTML = formatdate(date1);
+            document.getElementById('resultend').innerHTML = formatdate(date2);
+            document.getElementById('resultdatenow').innerHTML = formatdate(datetonow);
+            document.getElementById('sumdate').innerHTML = total(date2, date1);
+            document.getElementById('totaldate').innerHTML = total(date2, datetonow);//bug เดือนปี เกิน 1 เดือน
+            document.getElementById('check3').setAttribute("checked","True");
+        }
+        function check1(){
+            document.getElementById('check1').setAttribute("checked","True");
+        }
+        function check2(){
+            document.getElementById('check2').setAttribute("checked","True");
+        }
+    </script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
